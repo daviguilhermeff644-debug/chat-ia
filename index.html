@@ -96,7 +96,7 @@
     </header>
     
     <div id="chat-window">
-        <div class="msg ai">Olá!Qual sua dúvida hoje?</div>
+        <div class="msg ai">Olá! Qual sua dúvida hoje?</div>
     </div>
 
     <div id="typing" class="typing">Consultando material...</div>
@@ -117,7 +117,6 @@
     function addMessage(text, side) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `msg ${side}`;
-        // Faz o chat entender as quebras de linha da IA
         msgDiv.innerHTML = text.replace(/\n/g, '<br>');
         chatWindow.appendChild(msgDiv);
         chatWindow.scrollTop = chatWindow.scrollHeight;
