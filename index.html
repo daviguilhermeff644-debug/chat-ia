@@ -9,7 +9,6 @@
         :root {
             --primary: #0046ad; 
             --secondary: #ffd700; 
-            --bg-gradient: linear-gradient(135deg, #003380 0%, #001a4d 100%);
             --chat-bg: #f8f9fa;
             --text-dark: #2c3e50;
         }
@@ -18,7 +17,11 @@
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background: var(--bg-gradient); 
+            /* Imagem de fundo tecnológica fiel à ideia da foto */
+            background: linear-gradient(rgba(0, 26, 77, 0.8), rgba(0, 26, 77, 0.8)), 
+                        url('https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2000&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
             margin: 0; 
             display: flex; 
             justify-content: center; 
@@ -28,21 +31,33 @@
             overflow: hidden;
         }
 
+        /* Efeito de brilho ao fundo (fiel aos elementos neon da foto) */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 102, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
         #chat-container { 
             width: 95%; 
             max-width: 480px; 
             height: 85vh; 
             background: white; 
             border-radius: 20px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); 
             display: flex; 
             flex-direction: column; 
             overflow: hidden; 
-            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.8s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -52,10 +67,11 @@
             padding: 20px; 
             text-align: center; 
             border-bottom: 4px solid var(--secondary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        header h1 { margin: 0; font-size: 1.2em; font-weight: 700; letter-spacing: 0.5px; }
-        header p { margin: 5px 0 0; font-size: 0.85em; opacity: 0.9; font-weight: 400; }
+        header h1 { margin: 0; font-size: 1.3em; font-weight: 700; letter-spacing: 1px; }
+        header p { margin: 5px 0 0; font-size: 0.9em; opacity: 0.9; }
 
         #chat-window { 
             flex: 1; 
@@ -65,6 +81,8 @@
             flex-direction: column; 
             gap: 15px; 
             background-color: var(--chat-bg);
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px; /* Efeito de papel quadriculado sutil */
         }
 
         .msg { 
@@ -73,86 +91,60 @@
             border-radius: 18px; 
             line-height: 1.5; 
             font-size: 0.95em; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             word-wrap: break-word;
+            position: relative;
         }
 
-        .user { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 4px; }
-        .ai { align-self: flex-start; background: white; color: var(--text-dark); border-bottom-left-radius: 4px; border: 1px solid #e0e0e0; }
+        .user { 
+            align-self: flex-end; 
+            background: var(--primary); 
+            color: white; 
+            border-bottom-right-radius: 4px; 
+        }
 
-        .input-area { padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px; background: white; }
-        input { flex: 1; padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; outline: none; }
-        button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .ai { 
+            align-self: flex-start; 
+            background: white; 
+            color: var(--text-dark); 
+            border-bottom-left-radius: 4px; 
+            border: 1px solid #e2e8f0;
+        }
+
+        .input-area { 
+            padding: 18px; 
+            border-top: 1px solid #eee; 
+            display: flex; 
+            gap: 10px; 
+            background: white; 
+        }
+
+        input { 
+            flex: 1; 
+            padding: 14px; 
+            border: 2px solid #edf2f7; 
+            border-radius: 12px; 
+            outline: none; 
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 0 25px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #00358a; transform: scale(1.02); }
         
-        .typing { font-size: 0.8em; color: #718096; padding: 5px 20px; display: none; background: var(--chat-bg); }
-    </style>
-</head>
-<body>
-
-<div id="chat-container">
-    <header>
-        <h1>UniEja EAD</h1>
-        <p>Sala de Aula Virtual 🎓</p>
-    </header>
-    
-    <div id="chat-window">
-        <div class="msg ai">Olá! Qual sua dúvida hoje?</div>
-    </div>
-
-    <div id="typing" class="typing">Consultando material...</div>
-
-    <form class="input-area" id="chat-form">
-        <input type="text" id="user-input" placeholder="Tire sua dúvida agora..." required autocomplete="off">
-        <button type="submit" id="send-btn">Enviar</button>
-    </form>
-</div>
-
-<script>
-    const chatForm = document.getElementById('chat-form');
-    const chatWindow = document.getElementById('chat-window');
-    const userInput = document.getElementById('user-input');
-    const typing = document.getElementById('typing');
-    const sendBtn = document.getElementById('send-btn');
-
-    function addMessage(text, side) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `msg ${side}`;
-        msgDiv.innerHTML = text.replace(/\n/g, '<br>');
-        chatWindow.appendChild(msgDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = userInput.value.trim();
-        if (!text) return;
-
-        addMessage(text, 'user');
-        userInput.value = '';
-        typing.style.display = 'block';
-        sendBtn.disabled = true;
-
-        try {
-            const response = await fetch('https://vida09.app.n8n.cloud/webhook/901b43db-e0a2-41c9-b638-7efe05d7045b', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chatInput: text })
-            });
-
-            if (!response.ok) throw new Error('Erro no servidor');
-
-            const data = await response.json();
-            const respostaFinal = data.resposta || "Tive um erro no processamento. Tente novamente!";
-            addMessage(respostaFinal, 'ai');
-
-        } catch (error) {
-            console.error('Erro:', error);
-            addMessage("O Professor está em intervalo agora. Tente em instantes!", 'ai');
-        } finally {
-            typing.style.display = 'none';
-            sendBtn.disabled = false;
-        }
-    });
-</script>
-</body>
-</html>
+        .typing { 
+            font-size: 0.85em; 
+            color: #64748b; 
+            padding:
